@@ -1,4 +1,6 @@
-import { useEffect } from "react";
+import Link from "next/link";
+
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 import { InputText } from "primereact/inputtext";
@@ -11,13 +13,14 @@ import axiosFetcher from "@/apis/axios";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import yup from "@/libs/yup";
+import { Dialog } from "primereact/dialog";
 
 const { post } = axiosFetcher;
 
 const schema = yup
   .object({
-    email: yup.string().required().email(),
-    password: yup.string().min(8).max(12).required(),
+    email: yup.string().email().required(),
+    password: yup.string().required().min(8).max(12),
   })
   .required();
 
@@ -36,22 +39,32 @@ interface IRegisterResponse {
 type TFieldName = "email" | "password" | undefined;
 
 export default function Register() {
-  const defaultValues = {
-    email: "",
-    password: "",
-  };
-
   const {
     control,
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm({ defaultValues, resolver: yupResolver(schema) });
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(schema),
+  });
 
   const dispatch = useAppDispatch();
+  const [visible, setVisible] = useState(false);
 
   const onSubmit = async (submitData: IRegisterForm) => {
-    const result = await post<IRegisterResponse>("user/login", submitData);
+    setVisible(true);
+
+    const result = await post<IRegisterResponse>(
+      "user/login",
+      submitData,
+      false
+    );
+
+    setVisible(false);
 
     if (result === undefined) return;
     const { token } = result?.user;
@@ -130,12 +143,32 @@ export default function Register() {
       </div>
 
       <Button
-        className="bg-red-600 px-10"
+        className="bg-red-600 px-10 mb-6"
         onClick={handleSubmit(onSubmit)}
         rounded
       >
         登入
       </Button>
+
+      <div>
+        還沒有註冊帳號？
+        <Link href="sign-up">
+          <Button className="text-red-600 p-0" link>
+            註冊
+          </Button>
+        </Link>
+      </div>
+
+      {/* 登入中 loading */}
+      <Dialog
+        header={<>載入中</>}
+        visible={visible}
+        focusOnShow={false}
+        style={{ width: "50vw" }}
+        onHide={() => setVisible(false)}
+      >
+        <p className="text-center text-lg">登入中，請稍候</p>
+      </Dialog>
     </div>
   );
 }

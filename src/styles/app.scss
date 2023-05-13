@@ -1,8 +1,16 @@
 // Primereact styles
-//theme
-@import "primereact/resources/themes/lara-light-indigo/theme.css";
+@import "./primeTheme.css";
 //core
 @import "primereact/resources/primereact.min.css";
+// icon
+@import "primeicons/primeicons.css";
+@import "./tailwind.css";
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
+
+@import "./primeCustom.scss";
+@import "./swiperCustom.scss";
 
 // 基本設定
 html,
@@ -11,5 +19,78 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Noto Sans TC", sans-serif;
-  overflow: auto;
+  position: relative;
+}
+main {
+  min-height: calc(100vh - 232.8px);
+}
+.front-max-container {
+  max-width: 1280px;
+  width: 100%;
+  padding: 1.25rem 40px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+section {
+  position: relative;
+}
+.p-decorative-circle {
+  @apply bg-secondary;
+  position: absolute;
+  width: 20vw;
+  height: 40vw;
+  border-radius: 40vw 0 0 40vw;
+  opacity: 0.1;
+  filter: blur(100px);
+}
+.p-left-decorative-circle-1 {
+  left: 0px;
+  top: 30%;
+  border-radius: 0 40vw 40vw 0;
+}
+.p-right-decorative-circle-1 {
+  right: 0px;
+  top: 10%;
+}
+.p-right-decorative-circle-2 {
+  right: 0px;
+  top: 60%;
+}
+.t-decorative-circle {
+  @apply bg-secondary;
+  position: absolute;
+  width: 10vw;
+  height: 20vw;
+  border-radius: 20vw 0 0 20vw;
+  opacity: 0.1;
+  filter: blur(57px);
+}
+
+.t-left-decorative-circle {
+  width: 50vw;
+  height: 25vw;
+  border-radius: 0 0 50vw 50vw;
+  top: -250px;
+  z-index: 1;
+}
+.t-right-decorative-circle-1 {
+  right: 0px;
+  bottom: -20px;
+}
+
+.t-right-decorative-circle-2 {
+  width: 20vw;
+  height: 10vw;
+  border-radius: 20vw 20vw 0 0;
+  right: 0;
+  bottom: 0;
+}
+@media (max-width: 640px) {
+  main {
+    min-height: calc(100vh - 193.8px);
+  }
+  .p-decorative-circle,
+  .t-decorative-circle {
+    display: none;
+  }
 }
